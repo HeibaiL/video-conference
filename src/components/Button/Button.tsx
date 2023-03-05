@@ -5,7 +5,7 @@ import classNames from "classnames";
 //styles
 import styles from "@/styles/components/button.module.scss"
 
-interface ButtonProps {
+type ButtonProps = {
   children: string;
   className?: string;
   onSubmit?: () => void;
