@@ -1,0 +1,3 @@
+{
+  "extends": ["@coax/eslint-config-fe-react", "next/core-web-vitals"]
+}
