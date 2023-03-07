@@ -9,7 +9,7 @@ type ButtonProps = {
   children: string;
   className?: string;
   onSubmit?: () => void;
-  type: "primary"| "secondary"
+  type: "primary" | "secondary"
 }
 
 const Button: FC<ButtonProps> = (props) => {
