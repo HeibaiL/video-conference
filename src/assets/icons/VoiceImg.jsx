@@ -1,6 +1,7 @@
 import React from "react";
 
-const VoiseImg = () => {
+
+const VoiceImg = () => {
   return (
     <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M15.75 22.75C19.616 22.75 22.75 19.616 22.75 15.75C22.75 11.884 19.616 8.75 15.75 8.75C11.884 8.75 8.75 11.884 8.75 15.75C8.75 19.616 11.884 22.75 15.75 22.75Z" fill="black"/>
@@ -9,4 +10,4 @@ const VoiseImg = () => {
   );
 };
 
-export default VoiseImg;
+export default VoiceImg;

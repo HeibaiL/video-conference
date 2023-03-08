@@ -1,13 +1,14 @@
 import Head from "next/head"
+import Image from "next/image";
 
 //components
 import Button from "@/components/Button";
 
 //assets
-import LaptopImg from "@/assets/icons/LaptopImg";
-import CallImg from "@/assets/icons/CallImg";
+import LaptopImg from "@/assets/img/Laptop.png";
+import CallImg from "@/assets/img/CallImg.png";
 import NoiseImg from "@/assets/icons/NoiseImg";
-import VoiseImg from "@/assets/icons/VoiseImg";
+import VoiceImg from "@/assets/icons/VoiceImg";
 import CameraImg from "@/assets/icons/CameraImg";
 import SmileImg from "@/assets/icons/SmileImg";
 
@@ -42,7 +43,7 @@ export default function Home() {
                 <Button type={"primary"}>Get call</Button>
               </div>
               <div className={styles.previewImg}>
-                <LaptopImg/>
+                <Image src={LaptopImg} alt={"LaptopImg"}/>
               </div>
             </div>
           </div>
@@ -50,7 +51,7 @@ export default function Home() {
 
         <section className={styles.call}>
           <div className={styles.callContent}>
-            <div className={styles.callImg}><CallImg/></div>
+            <div className={styles.callImg}><Image src={CallImg} alt={"CallImg"}/></div>
             <h2>Making video call amazing</h2>
             <p>
               Tikcle is a simple yet powerful video app that connects you to you co-workers through lightweight
@@ -79,7 +80,7 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.featuresElement}>
-                <VoiseImg/>
+                <VoiceImg/>
                 <div className={styles.elementContent}>
                   <h3>Voice Rooms</h3>
                   <p>Smart filtering to remove noise and boosting your voice</p>
