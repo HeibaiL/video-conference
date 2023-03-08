@@ -1,10 +1,23 @@
-:root {
+html{
 
+}
+:root {
     /*colors*/
-    --white-500: rgba(255,255,255);
+    --black: rgba(0, 0, 0);
+    --white: rgba(255, 255, 255);
+    --blue-700: #010689;
+    --blue-500: #141EFF;
+    --blue-300: #B0B3FF;
+    --pink-700: #90009C;
+    --pink-500: #ED1BFFC;
+    --pink-300: #FAC0FF;
+    --gray-700: #303030;
+    --gray-500: #585858;
+    --gray-300: #979797;
+    --gray-100: #ededed;
 
     /*fonts*/
 
     /*font-family*/
-
+    --main-font: 'Rubik', sans-serif;
 }

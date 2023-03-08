@@ -12,11 +12,23 @@ export default {
   },
 } as ComponentMeta<typeof ButtonComponent>;
 
-const Template: ComponentStory<typeof ButtonComponent> = (args) => <ButtonComponent {...args} />;
+const primaryTemplate: ComponentStory<typeof ButtonComponent> = (args) => (
+  <ButtonComponent {...args} >Submit</ButtonComponent>
+);
+const secondaryTemplate: ComponentStory<typeof ButtonComponent> = (args) => (
+  <ButtonComponent {...args} >Submit</ButtonComponent>
+);
 
-export const Button = Template.bind({});
-Button.args = {
+export const PrimaryButton = primaryTemplate.bind({});
+export const SecondaryButton = secondaryTemplate.bind({});
+
+PrimaryButton.args = {
   type: "primary",
+  children: "Button",
+};
+
+SecondaryButton.args = {
+  type: "secondary",
   children: "Button",
 };
 
