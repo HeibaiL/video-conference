@@ -1,11 +1,9 @@
 import React, { FC, useState } from "react";
 import classes from "classnames";
 
-//components
-import Drawer from "@/components/Header/components/Drawer";
-
 //styles
 import styles from "@/styles/components/header.module.scss";
+import { Drawer as AntdDrawer } from "antd";
 
 type BurgerProps = {
     isMobile:boolean;
@@ -40,7 +38,12 @@ const Burger: FC<BurgerProps> = (props) => {
           </div>
         </div>
       </div>
-      <Drawer modalOpen={modalOpen} drawerContent={drawerContent}></Drawer>
+      <AntdDrawer width={"100vw"} closeIcon={null} className={styles.drawer} open={modalOpen}
+      >
+        <div className={classes(styles.navWrapper, styles.drawerContent)}>
+          {drawerContent}
+        </div>
+      </AntdDrawer>
     </>
   );
 };
