@@ -1,10 +1,13 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import Head from "next/head"
 import Image from "next/image";
 
 //components
 import Button from "@/components/Button";
 import Layout from "@/layouts/Layout";
+
+//helpers
+import websocket from "../ws"
 
 //assets
 import LaptopImg from "@/assets/img/Laptop.png";
@@ -19,6 +22,12 @@ import styles from "@/styles/pages/home.module.scss";
 
 
 export default function Home() {
+
+  useEffect(() => {
+    websocket.emit("connection", "connection established")
+  }, [])
+
+
   return (
     <>
       <Head>
@@ -56,9 +65,10 @@ export default function Home() {
             <div className={styles.callImg}><Image src={CallImg} alt={"CallImg"}/></div>
             <h2>Making video call amazing</h2>
             <p>
-              Tikcle is a simple yet powerful video app that connects you to you co-workers through lightweight
-              videoconferencing. It’s perfect for design sessions, brainstorm sessions, code reviews, business meetings,
-              costumer support, product demos and much more...
+                Tikcle is a simple yet powerful video app that connects you to you co-workers through lightweight
+                videoconferencing. It’s perfect for design sessions, brainstorm sessions, code reviews,
+                business meetings,
+                costumer support, product demos and much more...
             </p>
           </div>
         </section>
@@ -106,7 +116,6 @@ export default function Home() {
             <Button type={"primary"}>Get call</Button>
           </div>
         </section>
-
       </main>
     </>
   )

@@ -30,8 +30,7 @@ const Header: FC = () => {
       {NAVIGATION_LIST.map(el => (
         <li key={el.title} className={styles.navItem}>
           <Link className={el.className} href={el.url}>
-            {el.hasButton
-              ? <Button type="secondary">{el.title}</Button>
+            {el.hasButton ? <Button type="secondary">{el.title}</Button>
               : el.title
             }
           </Link>
