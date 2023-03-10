@@ -1,7 +1,9 @@
-html{
-
-}
 :root {
+
+    --main-darklg: #1d2635;
+    --main-dark: #161d29;
+    --primary-color: #2f80ec;
+    --main-light: #eeeeee;
     /*colors*/
     --black: rgba(0, 0, 0);
     --white: rgba(255, 255, 255);
