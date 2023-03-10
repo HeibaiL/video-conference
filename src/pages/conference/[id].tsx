@@ -1,5 +1,6 @@
-import { FC } from "react";
-
+import { FC, useEffect } from "react";
+import websocket from "@/ws"
+import { useRouter } from "next/router";
 //components
 import Camera from "@/components/Camera";
 
@@ -8,6 +9,18 @@ import styles from "@/styles/pages/conference.module.scss"
 
 
 const Conference :FC = () => {
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.query.id) {
+      websocket.emit("joinRoom", router.query.id)
+
+      websocket.on("userConnected", (roomId) => {
+        console.log("ROOM", roomId)
+      })
+    }
+  }, [router])
+
   return (
     <>
       <div className={styles.header}>

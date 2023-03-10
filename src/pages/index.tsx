@@ -1,6 +1,7 @@
 import { ReactElement, useEffect } from "react";
-import Head from "next/head"
+import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 //components
 import Button from "@/components/Button";
@@ -22,10 +23,20 @@ import styles from "@/styles/pages/home.module.scss";
 
 
 export default function Home() {
+  const router = useRouter();
 
   useEffect(() => {
-    websocket.emit("connection", "connection established")
-  }, [])
+    websocket.on("getRoom", (data) => {
+      router.push(`/conference/${data}`)
+    })
+    websocket.on("userConnected", (roomId) => {
+      console.log("ROOM", roomId)
+    })
+  }, [websocket])
+
+  const clickHandler = () => {
+    websocket.emit("getRoom", "connection established")
+  }
 
 
   return (
@@ -51,7 +62,7 @@ export default function Home() {
                     Revolutionary video calling app for design and code reviews.
                     With Tikcle, you ‘ll never to leave you house again.
                 </p>
-                <Button type={"primary"}>Get call</Button>
+                <Button onClick={clickHandler} type={"primary"}>Get call</Button>
               </div>
               <div className={styles.previewImg}>
                 <Image src={LaptopImg} alt={"LaptopImg"}/>
