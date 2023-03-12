@@ -1,45 +1,25 @@
-import { useRef, useState, useEffect, FC } from "react";
+import { useRef, useEffect, FC } from "react";
 
-const VideoStream:FC = () => {
-  const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
+type VideoProps = {
+  src: MediaStream | null
+}
+
+const Video:FC<VideoProps> = ({ src }) => {
+
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    async function setupWebcamVideo() {
-      if (!mediaStream) {
-        await setupMediaStream();
-      } else {
-
-        const videoCurr = videoRef.current;
-        if (!videoCurr) return;
-        const video = videoCurr;
-        if (!video.srcObject) {
-          video.srcObject = mediaStream;
-        }
-      }
+    if (videoRef.current) {
+      videoRef.current.srcObject = src
     }
-    setupWebcamVideo();
-  }, [mediaStream]);
+  }, [src]);
 
-
-  async function setupMediaStream() {
-    try {
-      const ms = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
-        audio: true
-      });
-      setMediaStream(ms);
-    } catch (e) {
-      alert("Camera is disabled");
-      throw e;
-    }
-  }
 
   return (
     <div className="w-full h-full relative z-0">
-      <video className="h-full w-full mx-auto" ref={videoRef} autoPlay muted />
+      <video style={{ width: 500 }} className="h-full w-50% mx-auto" ref={videoRef} autoPlay muted />
     </div>
   );
 }
 
-export default VideoStream;
+export default Video;

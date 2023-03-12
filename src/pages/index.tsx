@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -7,8 +7,6 @@ import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import Layout from "@/layouts/Layout";
 
-//helpers
-import websocket from "../ws"
 
 //assets
 import LaptopImg from "@/assets/img/Laptop.png";
@@ -25,17 +23,16 @@ import styles from "@/styles/pages/home.module.scss";
 export default function Home() {
   const router = useRouter();
 
-  useEffect(() => {
-    websocket.on("getRoom", (data) => {
-      router.push(`/conference/${data}`)
-    })
-    websocket.on("userConnected", (roomId) => {
-      console.log("ROOM", roomId)
-    })
-  }, [websocket])
-
-  const clickHandler = () => {
-    websocket.emit("getRoom", "connection established")
+  const clickHandler = async (): Promise<any> => {
+    try {
+      const res = await fetch("http://localhost:8000/api/room");
+      const { roomId } = await res.json();
+      if (roomId) {
+        router.push(`/conference/${roomId}`)
+      }
+    } catch (ex) {
+      return null
+    }
   }
 
 

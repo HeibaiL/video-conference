@@ -1,26 +1,77 @@
-import { FC, useEffect } from "react";
-import websocket from "@/ws"
+import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+
 //components
 import Camera from "@/components/Camera";
+
+//helpers
+import websocket from "@/ws"
 
 //styles
 import styles from "@/styles/pages/conference.module.scss"
 
 
 const Conference :FC = () => {
-  const router = useRouter()
+  const [mediaStream, setMediaStream] = useState<MediaStream[]>([]);
+  const [selfStream, setSelfStream] = useState<MediaStream | null>(null);
+  const router = useRouter();
+  const roomId = router.query.id;
 
   useEffect(() => {
-    if (router.query.id) {
-      websocket.emit("joinRoom", router.query.id)
 
-      websocket.on("userConnected", (roomId) => {
-        console.log("ROOM", roomId)
+    const startStream = async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user" },
+        audio: true
+      });
+      setSelfStream(stream)
+      const PeerJs = (await import("peerjs")).default;
+      const peer = new PeerJs();
+
+      const connection = peer.on("open", (id) => {
+        websocket.emit("joinRoom", roomId, id)
+      })
+
+      connection.on("call", call => {
+        call.answer(stream)
+
+        call.on("stream", userVideoStream => {
+          setMediaStream((prev) => {
+            return prev.includes(userVideoStream) ? prev : [...prev, userVideoStream]
+          })
+        })
+
+        websocket.on("userDisconnected", () => {
+          call.close();
+          setMediaStream([])
+        })
+      })
+
+      websocket.on("userConnected", (roomUserId) => {
+        const call = peer.call(roomUserId, stream);
+
+        call.on("stream", userVideoStream => {
+          setMediaStream((prev) => {
+            return prev.includes(userVideoStream) ? prev : [...prev, userVideoStream]
+          })
+        })
+
+        websocket.on("userDisconnected", () => {
+          call.close();
+          setMediaStream([])
+        })
       })
     }
-  }, [router])
 
+    startStream()
+    
+    return () => {
+      websocket.disconnect()
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  
   return (
     <>
       <div className={styles.header}>
@@ -35,7 +86,8 @@ const Conference :FC = () => {
         <div className={styles.mainLeft}>
           <div className={styles.videosGroup}>
             <div id={styles.videoGrid}>
-              <Camera/>
+              <Camera src={selfStream}/>
+              {mediaStream.map((stream, i) => <Camera key={stream.id + i} src={stream}/>)}
             </div>
           </div>
           <div className={styles.options}>
