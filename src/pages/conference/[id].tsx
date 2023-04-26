@@ -1,8 +1,8 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
 
 //components
-import Camera from "@/components/Camera";
+import Video from "@/components/Camera";
 
 //helpers
 import websocket from "@/ws"
@@ -11,13 +11,14 @@ import websocket from "@/ws"
 import styles from "@/styles/pages/conference.module.scss"
 
 
-const Conference :FC = () => {
+const Conference:FC = () => {
   const [mediaStream, setMediaStream] = useState<MediaStream[]>([]);
   const [selfStream, setSelfStream] = useState<MediaStream | null>(null);
   const router = useRouter();
   const roomId = router.query.id;
 
   useEffect(() => {
+    let peers: any = {};
 
     const startStream = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -34,31 +35,31 @@ const Conference :FC = () => {
 
       connection.on("call", call => {
         call.answer(stream)
-
+        peers[call.peer] = call;
         call.on("stream", userVideoStream => {
           setMediaStream((prev) => {
             return prev.includes(userVideoStream) ? prev : [...prev, userVideoStream]
           })
-        })
-
-        websocket.on("userDisconnected", () => {
-          call.close();
-          setMediaStream([])
         })
       })
 
-      websocket.on("userConnected", (roomUserId) => {
-        const call = peer.call(roomUserId, stream);
-
+      websocket.on("userConnected", (userId) => {
+        const call = peer.call(userId, stream);
+        peers[userId] = call;
+     
         call.on("stream", userVideoStream => {
           setMediaStream((prev) => {
             return prev.includes(userVideoStream) ? prev : [...prev, userVideoStream]
           })
         })
+      })
 
-        websocket.on("userDisconnected", () => {
-          call.close();
-          setMediaStream([])
+      websocket.on("userDisconnected", (userId) => {
+        console.log(peers, userId)
+        peers[userId].close();
+        setMediaStream(prev => {
+          // prev.pop()
+          return [...prev]
         })
       })
     }
@@ -86,8 +87,8 @@ const Conference :FC = () => {
         <div className={styles.mainLeft}>
           <div className={styles.videosGroup}>
             <div id={styles.videoGrid}>
-              <Camera src={selfStream}/>
-              {mediaStream.map((stream, i) => <Camera key={stream.id + i} src={stream}/>)}
+              <Video src={selfStream}/>
+              {mediaStream.map((stream, i) => <Video key={stream.id + i} src={stream}/>)}
             </div>
           </div>
           <div className={styles.options}>

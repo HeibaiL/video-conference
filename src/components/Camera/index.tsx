@@ -1,3 +1,3 @@
-import Camera from "./Camera";
+import Video from "./VIdeo";
 
-export default Camera
+export default Video;
