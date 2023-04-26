@@ -8,17 +8,17 @@ import styles from "@/styles/components/button.module.scss"
 type ButtonProps = {
   children: string;
   className?: string;
-  onSubmit?: () => void;
+  onClick?: () => void;
   type: "primary" | "secondary"
 }
 
 const Button: FC<ButtonProps> = (props) => {
-  const { children, className, onSubmit, type } = props;
+  const { children, className, onClick, type } = props;
 
   const classes = classNames(styles.button, styles[type], className);
 
   return (
-    <AntdButton className={classes} onClick={onSubmit}>
+    <AntdButton className={classes} onClick={onClick}>
       {children}
     </AntdButton>
   )
