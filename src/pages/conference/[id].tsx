@@ -56,7 +56,6 @@ const Conference:FC = () => {
       })
 
       websocket.on("userDisconnected", (userId) => {
-        console.log(peers, userId)
         peers[userId].close();
         setMediaStream(prev => {
           // prev.pop()
