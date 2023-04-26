@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 //components
@@ -17,8 +17,9 @@ const Conference:FC = () => {
   const router = useRouter();
   const roomId = router.query.id;
 
+
   useEffect(() => {
-    let peers: any = {};
+    const peers: any = {};
 
     const startStream = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({
