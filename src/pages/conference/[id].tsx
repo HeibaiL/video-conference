@@ -1,33 +1,48 @@
+/* eslint-disable max-nested-callbacks */
 import { FC, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
+import Peer, { MediaConnection } from "peerjs";
 
 //components
 import Video from "@/components/Camera";
 
 //helpers
-import websocket from "@/ws"
+import useWebRTC from "@/hooks/useWebRTC";
 
 //styles
 import styles from "@/styles/pages/conference.module.scss"
 
 
+type StreamWIthMeta = {
+  stream: MediaStream,
+  userId: string
+}
+
+
 const Conference:FC = () => {
-  const [mediaStream, setMediaStream] = useState<MediaStream[]>([]);
+  const [mediaStream, setMediaStream] = useState<StreamWIthMeta[]>([]);
   const [selfStream, setSelfStream] = useState<MediaStream | null>(null);
-  const router = useRouter();
+
+  const router: NextRouter = useRouter();
+
+  const { getPeer, websocket } = useWebRTC();
+
   const roomId = router.query.id;
 
   useEffect(() => {
-    const peers: any = {};
+    
+    const peers: { [key:string]: MediaConnection } = {};
 
     const startStream = async () => {
+      const peer: Peer = await getPeer()
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
         audio: true
       });
+
       setSelfStream(stream);
-      const PeerJs = (await import("peerjs")).default;
-      const peer = new PeerJs();
+
     
       const connection = peer.on("open", (id) => {
         websocket.emit("joinRoom", roomId, id)
@@ -38,40 +53,42 @@ const Conference:FC = () => {
         peers[call.peer] = call;
         call.on("stream", userVideoStream => {
           setMediaStream((prev) => {
-            return prev.includes(userVideoStream) ? prev : [...prev, userVideoStream]
+            return prev.some(userStream => userStream.userId === call.peer)
+              ? prev
+              : [...prev, { userId: call.peer, stream: userVideoStream }]
           })
         })
       })
 
-      websocket.on("userConnected", (userId) => {
+      websocket.on("userConnected", (userId:string) => {
         const call = peer.call(userId, stream);
         peers[userId] = call;
      
         call.on("stream", userVideoStream => {
           setMediaStream((prev) => {
-            return prev.includes(userVideoStream) ? prev : [...prev, userVideoStream]
+            return prev.some(userStream => userStream.userId === call.peer)
+              ? prev
+              : [...prev, { userId: call.peer, stream: userVideoStream }]
           })
         })
       })
 
-      websocket.on("userDisconnected", (userId) => {
-  
+      websocket.on("userDisconnected", (userId:string) => {
         peers[userId].close();
-        setMediaStream(prev => {
-          // prev.pop()
-          return [...prev]
-        })
+        setMediaStream(prev => prev.filter(userStream => userStream.userId !== userId))
       })
     }
 
-    startStream()
+    if (websocket) {
+      startStream()
+    }
     
     return () => {
-      websocket.disconnect()
+      websocket?.disconnect()
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [websocket])
   
   return (
     <>
@@ -88,7 +105,7 @@ const Conference:FC = () => {
           <div className={styles.videosGroup}>
             <div id={styles.videoGrid}>
               <Video src={selfStream}/>
-              {mediaStream.map((stream, i) => <Video key={stream.id + i} src={stream}/>)}
+              {mediaStream.map((streamData, i) => <Video key={streamData.stream.id + i} src={streamData.stream}/>)}
             </div>
           </div>
           <div className={styles.options}>
