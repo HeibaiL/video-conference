@@ -1,4 +1,3 @@
-/* eslint-disable max-nested-callbacks */
 import { FC, useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import Peer, { MediaConnection } from "peerjs";
@@ -29,21 +28,30 @@ const Conference:FC = () => {
 
   const roomId = router.query.id;
 
+  const updateMediaStream = (userId: string, stream: MediaStream) => {
+    setMediaStream((prev) => {
+      return prev.some(userStream => userStream.userId === userId)
+        ? prev
+        : [...prev, { userId, stream }]
+    })
+  }
+
   useEffect(() => {
-    
-    const peers: { [key:string]: MediaConnection } = {};
 
     const startStream = async () => {
+      const peers: { [key:string]: MediaConnection } = {};
+      
       const peer: Peer = await getPeer()
 
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
         audio: true
       });
-
+      
       setSelfStream(stream);
 
-    
+      peer.connect(peer.id);
+
       const connection = peer.on("open", (id) => {
         websocket.emit("joinRoom", roomId, id)
       })
@@ -52,11 +60,7 @@ const Conference:FC = () => {
         call.answer(stream)
         peers[call.peer] = call;
         call.on("stream", userVideoStream => {
-          setMediaStream((prev) => {
-            return prev.some(userStream => userStream.userId === call.peer)
-              ? prev
-              : [...prev, { userId: call.peer, stream: userVideoStream }]
-          })
+          updateMediaStream(call.peer, userVideoStream)
         })
       })
 
@@ -65,11 +69,7 @@ const Conference:FC = () => {
         peers[userId] = call;
      
         call.on("stream", userVideoStream => {
-          setMediaStream((prev) => {
-            return prev.some(userStream => userStream.userId === call.peer)
-              ? prev
-              : [...prev, { userId: call.peer, stream: userVideoStream }]
-          })
+          updateMediaStream(call.peer, userVideoStream)
         })
       })
 
@@ -79,8 +79,11 @@ const Conference:FC = () => {
       })
     }
 
-    if (websocket) {
-      startStream()
+    if (websocket && roomId) {
+      websocket.connect()
+
+      websocket.on("connect", startStream)
+   
     }
     
     return () => {
@@ -88,7 +91,8 @@ const Conference:FC = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [websocket])
+  }, [websocket, roomId])
+
   
   return (
     <>
