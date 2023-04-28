@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import debounce from "lodash/debounce";
 
-const TABLET_SCREEN_WIDTH = 900;
-const MOBILE_SCREEN_WIDTH = 650;
+export const TABLET_SCREEN_WIDTH = 900;
+export const MOBILE_SCREEN_WIDTH = 650;
 
 
 export function useWindowDimension() {

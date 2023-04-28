@@ -13,12 +13,12 @@ type ButtonProps = {
 }
 
 const Button: FC<ButtonProps> = (props) => {
-  const { children, className, onClick, type } = props;
+  const { children, className, onClick, type, ...rest } = props;
 
   const classes = classNames(styles.button, styles[type], className);
 
   return (
-    <AntdButton className={classes} onClick={onClick}>
+    <AntdButton className={classes} onClick={onClick} {...rest} >
       {children}
     </AntdButton>
   )

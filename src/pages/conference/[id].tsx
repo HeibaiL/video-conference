@@ -21,6 +21,7 @@ type StreamWIthMeta = {
 const Conference:FC = () => {
   const [mediaStream, setMediaStream] = useState<StreamWIthMeta[]>([]);
   const [selfStream, setSelfStream] = useState<MediaStream | null>(null);
+  const [connected, setConnected] = useState(false); //TODO: ADD LOGIC FOR connected flag
 
   const router: NextRouter = useRouter();
 
@@ -50,10 +51,14 @@ const Conference:FC = () => {
       
       setSelfStream(stream);
 
-      peer.connect(peer.id);
-
       const connection = peer.on("open", (id) => {
-        websocket.emit("joinRoom", roomId, id)
+    
+        websocket?.emit("joinRoom", roomId, id)
+        setConnected(true)
+      })
+
+      peer.on("error", error => {
+        console.log(error);
       })
 
       connection.on("call", call => {
@@ -64,7 +69,7 @@ const Conference:FC = () => {
         })
       })
 
-      websocket.on("userConnected", (userId:string) => {
+      websocket?.on("userConnected", (userId:string) => {
         const call = peer.call(userId, stream);
         peers[userId] = call;
      
@@ -73,7 +78,7 @@ const Conference:FC = () => {
         })
       })
 
-      websocket.on("userDisconnected", (userId:string) => {
+      websocket?.on("userDisconnected", (userId:string) => {
         peers[userId].close();
         setMediaStream(prev => prev.filter(userStream => userStream.userId !== userId))
       })
@@ -81,7 +86,6 @@ const Conference:FC = () => {
 
     if (websocket && roomId) {
       websocket.connect()
-
       websocket.on("connect", startStream)
    
     }
@@ -93,9 +97,10 @@ const Conference:FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [websocket, roomId])
 
+  console.log(connected)
   
   return (
-    <>
+    <div data-testid="conference">
       <div className={styles.header}>
         <div className={styles.logo}>
           <div className={styles.headerBack}>
@@ -145,7 +150,7 @@ const Conference:FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 };
 
