@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import io from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 
 const useWebRTC = () => {
-  const [websocket, setWebSocket] = useState<any>(null);
+  const [websocket, setWebSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
     const ws = io("ws://localhost:8000");

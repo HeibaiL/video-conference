@@ -16,7 +16,7 @@ const Video:FC<VideoProps> = ({ src, ...props }) => {
 
 
   return (
-    <div className="w-full h-full relative z-0" {...props}>
+    <div className="w-full h-full relative z-0" {...props} data-testid="video">
       <video style={{ width: 500 }} className="h-full w-50% mx-auto" ref={videoRef} autoPlay muted />
     </div>
   );
