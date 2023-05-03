@@ -17,7 +17,7 @@ const Burger: FC<BurgerProps> = (props) => {
 
   const handleModalClick = () => {
     setModalOpen(!modalOpen);
-  }
+  };
 
   return (
     <>

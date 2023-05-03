@@ -1,3 +1,6 @@
 {
-  "extends": ["@coax/eslint-config-fe-react", "next/core-web-vitals"]
+  "extends": ["@coax/eslint-config-fe-react", "next/core-web-vitals"],
+  "rules": {
+    "semi": [2, "always"]
+}
 }

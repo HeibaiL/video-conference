@@ -1,9 +1,9 @@
-import { FC } from "react"
+import { FC } from "react";
 import { Button as AntdButton } from "antd";
 import classNames from "classnames";
 
 //styles
-import styles from "@/styles/components/button.module.scss"
+import styles from "@/styles/components/button.module.scss";
 
 type ButtonProps = {
   children: string;
@@ -21,8 +21,8 @@ const Button: FC<ButtonProps> = (props) => {
     <AntdButton className={classes} onClick={onClick} {...rest} >
       {children}
     </AntdButton>
-  )
-}
+  );
+};
 
 
 export default Button;

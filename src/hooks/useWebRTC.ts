@@ -14,9 +14,9 @@ const useWebRTC = () => {
     const PeerJs = (await import("peerjs")).default;
 
     return new PeerJs();
-  }
+  };
 
-  return { getPeer, websocket }
+  return { getPeer, websocket };
 
-}
+};
 export default useWebRTC;

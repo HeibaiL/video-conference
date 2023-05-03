@@ -3,8 +3,8 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 
 //styles
-import "normalize.css/normalize.css"
-import "@/styles/index.css"
+import "normalize.css/normalize.css";
+import "@/styles/index.css";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   // eslint-disable-next-line no-unused-vars
@@ -17,7 +17,7 @@ type AppPropsWithLayout = AppProps & {
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
-  const getLayout = Component.getLayout ?? ((page) => page)
+  const getLayout = Component.getLayout ?? ((page) => page);
 
-  return getLayout(<Component {...pageProps} />)
+  return getLayout(<Component {...pageProps} />);
 }

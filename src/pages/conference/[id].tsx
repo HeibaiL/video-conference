@@ -3,13 +3,13 @@ import { NextRouter, useRouter } from "next/router";
 import Peer, { MediaConnection } from "peerjs";
 
 //components
-import Video from "@/components/Camera";
+import Video from "@/components/Video";
 
 //helpers
 import useWebRTC from "@/hooks/useWebRTC";
 
 //styles
-import styles from "@/styles/pages/conference.module.scss"
+import styles from "@/styles/pages/conference.module.scss";
 
 
 type StreamWIthMeta = {
@@ -33,16 +33,16 @@ const Conference:FC = () => {
     setMediaStream((prev) => {
       return prev.some(userStream => userStream.userId === userId)
         ? prev
-        : [...prev, { userId, stream }]
-    })
-  }
+        : [...prev, { userId, stream }];
+    });
+  };
 
   useEffect(() => {
 
     const startStream = async () => {
       const peers: { [key:string]: MediaConnection } = {};
       
-      const peer: Peer = await getPeer()
+      const peer: Peer = await getPeer();
 
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "user" },
@@ -53,51 +53,51 @@ const Conference:FC = () => {
 
       const connection = peer.on("open", (id) => {
     
-        websocket?.emit("joinRoom", roomId, id)
-        setConnected(true)
-      })
+        websocket?.emit("joinRoom", roomId, id);
+        setConnected(true);
+      });
 
       peer.on("error", error => {
         console.log(error);
-      })
+      });
 
       connection.on("call", call => {
-        call.answer(stream)
+        call.answer(stream);
         peers[call.peer] = call;
         call.on("stream", userVideoStream => {
-          updateMediaStream(call.peer, userVideoStream)
-        })
-      })
+          updateMediaStream(call.peer, userVideoStream);
+        });
+      });
 
       websocket?.on("userConnected", (userId:string) => {
         const call = peer.call(userId, stream);
         peers[userId] = call;
      
         call.on("stream", userVideoStream => {
-          updateMediaStream(call.peer, userVideoStream)
-        })
-      })
+          updateMediaStream(call.peer, userVideoStream);
+        });
+      });
 
       websocket?.on("userDisconnected", (userId:string) => {
         peers[userId].close();
-        setMediaStream(prev => prev.filter(userStream => userStream.userId !== userId))
-      })
-    }
+        setMediaStream(prev => prev.filter(userStream => userStream.userId !== userId));
+      });
+    };
 
     if (websocket && roomId) {
-      websocket.connect()
-      websocket.on("connect", startStream)
+      websocket.connect();
+      websocket.on("connect", startStream);
    
     }
     
     return () => {
-      websocket?.disconnect()
-    }
+      websocket?.disconnect();
+    };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [websocket, roomId])
+  }, [websocket, roomId]);
 
-  console.log(connected)
+  console.log(connected);
   
   return (
     <div data-testid="conference">
@@ -113,8 +113,8 @@ const Conference:FC = () => {
         <div className={styles.mainLeft}>
           <div className={styles.videosGroup}>
             <div id={styles.videoGrid}>
-              <Video src={selfStream}/>
-              {mediaStream.map((streamData, i) => <Video key={streamData.stream.id + i} src={streamData.stream}/>)}
+              <Video src={selfStream} type={mediaStream.length > 0 ? "small" : "large"}/>
+              {mediaStream.map((streamData, i) => <Video key={streamData.stream.id + i} src={streamData.stream} type="large"/>)}
             </div>
           </div>
           <div className={styles.options}>
@@ -151,7 +151,7 @@ const Conference:FC = () => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default Conference;
