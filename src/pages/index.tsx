@@ -7,6 +7,9 @@ import { useRouter } from "next/router";
 import Button from "@/components/Button";
 import Layout from "@/layouts/Layout";
 
+//helpers
+import { disableSSR } from "./utils.js";
+
 
 //assets
 import LaptopImg from "@/assets/img/Laptop.png";
@@ -20,7 +23,7 @@ import SmileImg from "@/assets/icons/SmileImg";
 import styles from "@/styles/pages/home.module.scss";
 
 
-export default function Home() {
+function Home() {
   const router = useRouter();
 
   const clickHandler = async (): Promise<any> => {
@@ -37,6 +40,7 @@ export default function Home() {
     }
   };
 
+  console.log(window);
 
   return (
     <>
@@ -136,3 +140,6 @@ Home.getLayout = function getLayout(page: ReactElement) {
     </Layout>
   );
 };
+
+
+export default disableSSR(Home);
