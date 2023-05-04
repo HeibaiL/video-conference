@@ -1,9 +1,10 @@
 import React, { FC, useState } from "react";
+import { Drawer as AntdDrawer } from "antd";
 import classes from "classnames";
 
 //styles
 import styles from "@/styles/components/header.module.scss";
-import { Drawer as AntdDrawer } from "antd";
+
 
 type BurgerProps = {
     isMobile: boolean;
@@ -17,7 +18,7 @@ const Burger: FC<BurgerProps> = (props) => {
 
   const handleModalClick = () => {
     setModalOpen(!modalOpen);
-  }
+  };
 
   return (
     <>

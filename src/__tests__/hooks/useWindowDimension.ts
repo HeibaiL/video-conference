@@ -1,5 +1,5 @@
-import { renderHook } from "@testing-library/react"
-import "@testing-library/jest-dom/extend-expect"
+import { renderHook } from "@testing-library/react";
+import "@testing-library/jest-dom/extend-expect";
 
 import { MOBILE_SCREEN_WIDTH, TABLET_SCREEN_WIDTH, useWindowDimension } from "@/hooks/useWindowDimension";
 
@@ -45,7 +45,7 @@ describe("useWindowDimension", () => {
     
   });
 
-  it("isMobile and isTablet show false if sreen width is in range", async () => {
+  it("isMobile and isTablet show false if sreen width is not in range", async () => {
     {
       const mobileWidth = MOBILE_SCREEN_WIDTH + 1;
       window.innerWidth = mobileWidth;

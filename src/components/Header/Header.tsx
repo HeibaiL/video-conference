@@ -1,6 +1,6 @@
 import { FC } from "react";
 import classes from "classnames";
-import Link from "next/link"
+import Link from "next/link";
 
 //components
 import Button from "@/components/Button";
@@ -13,13 +13,13 @@ import { useWindowDimension } from "@/hooks/useWindowDimension";
 import LogoImg from "@/assets/icons/LogoImg";
 
 //styles
-import styles from "@/styles/components/header.module.scss"
+import styles from "@/styles/components/header.module.scss";
 
 const NAVIGATION_LIST = [
   { title: "About", url: "#", className: "styles.navItem" },
   { title: "Plans", url: "#", className: "styles.navItem" },
   { title: "Sign Up", url: "#", className: "styles.navItem", hasButton: true },
-]
+];
 
 
 const Header: FC = () => {
@@ -37,7 +37,7 @@ const Header: FC = () => {
         </li>
       ))}
     </ul>
-  )
+  );
 
   return (
     <div className={styles.header}>

@@ -1,21 +1,23 @@
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect"
+import "@testing-library/jest-dom/extend-expect";
 import { useRouter } from "next/router";
-import Home from "@/pages/index"
+
+
+import Home from "@/pages/index";
 
 
 // mock useRouter
 jest.mock("next/router", () => ({
   useRouter: jest.fn()
-}))
+}));
 
-const pushMock = jest.spyOn(jest, "fn")
+const pushMock = jest.spyOn(jest, "fn");
 
 // add return value query and push
 useRouter.mockReturnValue({
   query: {},
   push: pushMock
-})
+});
 
 describe("Home page", () => {
   
@@ -24,7 +26,7 @@ describe("Home page", () => {
 
     render(<Home/>);
 
-    const homePage = screen.getByTestId("home-page")
+    const homePage = screen.getByTestId("home-page");
 
     expect(homePage).toBeInTheDocument();
   });
@@ -41,6 +43,6 @@ describe("Home page", () => {
     const button = screen.getByTestId("get-call-btn");
     button.click();
     expect(pushMock).toBeCalledTimes(1);
-  })
+  });
 });
   
