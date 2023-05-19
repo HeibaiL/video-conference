@@ -1,7 +1,7 @@
 import "normalize.css/normalize.css"
 
 //styles
-import "../src/styles/index.css"
+import "../src/styles/index.scss"
 
 
 export const parameters = {

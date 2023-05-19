@@ -69,6 +69,15 @@
   font-size: 1.2rem;
   width: 50px;
   margin: 0 0.5rem;
+  cursor: pointer;
+}
+
+.cancelButton {
+  background: rgba(var(--main-danger), 1);
+
+  &:hover {
+    background: rgba(var(--main-danger), 0.8);
+  }
 }
 
 .backgroundRed {
@@ -104,4 +113,15 @@
   justify-content: center;
   flex-wrap: wrap;
   grid-gap: 6px;
+}
+
+.userNameModal :global {
+
+  .ant-modal-title {
+    font-weight: 500;
+  }
+
+  .ant-modal-body {
+    padding: 10px 0;
+  }
 }

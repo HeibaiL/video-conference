@@ -4,12 +4,11 @@ import type { AppProps } from "next/app";
 
 //styles
 import "normalize.css/normalize.css";
-import "@/styles/index.css";
+import "@/styles/index.scss";
 
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  // eslint-disable-next-line no-unused-vars
-  getLayout?: (page: ReactElement) => ReactNode,
+  getLayout?: (_page: ReactElement) => ReactNode,
 }
 
 type AppPropsWithLayout = AppProps & {

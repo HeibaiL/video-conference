@@ -39,7 +39,7 @@ const Burger: FC<BurgerProps> = (props) => {
           </div>
         </div>
       </div>
-      <AntdDrawer width={"100vw"} closeIcon={null} className={styles.drawer} open={modalOpen}>
+      <AntdDrawer open={modalOpen} width={"100vw"} closeIcon={null} className={styles.drawer} >
         <div className={classes(styles.navWrapper, styles.drawerContent)}>
           {drawerContent}
         </div>

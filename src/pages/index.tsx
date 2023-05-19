@@ -8,7 +8,7 @@ import Button from "@/components/Button";
 import Layout from "@/layouts/Layout";
 
 //helpers
-import { disableSSR } from "./utils.js";
+import { disableSSR } from "@/pages/utils";
 
 
 //assets

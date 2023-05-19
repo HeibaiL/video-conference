@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
 import { useRouter } from "next/router";
 
-
+//element
 import Home from "@/pages/index";
 
 
@@ -14,6 +14,7 @@ jest.mock("next/router", () => ({
 const pushMock = jest.spyOn(jest, "fn");
 
 // add return value query and push
+// @ts-ignore
 useRouter.mockReturnValue({
   query: {},
   push: pushMock
@@ -22,7 +23,6 @@ useRouter.mockReturnValue({
 describe("Home page", () => {
   
   it("is rendered in dom", async () => {
-    
 
     render(<Home/>);
 
